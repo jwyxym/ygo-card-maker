@@ -1,0 +1,8 @@
+/back/target/
+/back/pics/
+/browser/target/
+/browser/pics/
+/front/node_modules/
+/front/public/cards.cdb
+/front/public/pics/
+/front/dist/
