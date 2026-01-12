@@ -7,6 +7,7 @@ use actix_web::{
 	Error,
 	App,
 	post,
+	get,
 	error::{
 		ErrorNotFound
 	}
@@ -14,7 +15,8 @@ use actix_web::{
 use std::{
 	fs::{
 		File,
-		create_dir_all
+		create_dir_all,
+		read_dir
 	},
 	io::{
 		Write
@@ -50,6 +52,26 @@ async fn upload(mut payload: Multipart) -> Result<HttpResponse, Error> {
 	}
 }
 
+#[get("/api/get")]
+async fn get() -> Result<HttpResponse, Error> {
+    let mut files: Vec<i64> = Vec::new();
+    
+    for entry in read_dir("pics")? {
+        let entry = entry?;
+        let path = entry.path();
+        
+        if path.is_file() {
+           	if let Some(name) = path.file_stem().and_then(|n| n.to_str()) {
+				if let Ok(name) = name.to_string().parse::<i64>() {
+                	files.push(name);
+				}
+            }
+        }
+    }
+    
+    Ok(HttpResponse::Ok().json(files))
+}
+
 #[actix_web::main]
 async fn main() -> () {
 	let port: i32 = 5174;
@@ -57,6 +79,7 @@ async fn main() -> () {
 		App::new()
 			.wrap(Cors::permissive())
 			.service(upload)
+			.service(get)
 	})
 	.bind(format!("127.0.0.1:{}", port));
 

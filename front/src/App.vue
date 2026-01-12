@@ -9,11 +9,14 @@
 	const show = ref(false);
 	onMounted(async () => {
 		const response = await fetch('./cards.cdb');
+		const get = await fetch('http://localhost:5174/api/get');
+		const except = await get.json();
 		const result = await SQL.find(await response.blob());
 		const cardLeaf = new YugiohCard({
 			resourcePath: './yugioh-card',
 		});
 		for (const i of result.values) {
+			if (except.includes(i[0])) continue;
 			try {
 				const card = new Card(i);
 				cardLeaf.setData(to_data(card));
@@ -24,7 +27,6 @@
 					method: 'POST',
 					body: formData
 				});
-				console.log(await response.json());
 			} catch (e) {
 				console.error(e)
 			}
