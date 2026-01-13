@@ -1,5 +1,5 @@
 <template>
-    <view></view>
+    <view><a v-if = 'fixed' class = 'fixed'>fixed</a></view>
 </template>
 <script setup lang = 'ts'>
     import { ref, onBeforeMount } from 'vue';
@@ -8,6 +8,7 @@
     import { YugiohCard } from 'yugioh-card';
     import { to_data } from '../script/pic.js'
 
+    const fixed = ref(false);
 
     onBeforeMount(async () => {
         const response = await fetch('./static/cards.cdb');
@@ -29,6 +30,7 @@
                 body: formData
             });
         }
+        fixed.value = true;
     });
 
 </script>
