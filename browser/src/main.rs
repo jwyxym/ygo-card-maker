@@ -6,6 +6,7 @@ use std::{
 	time::Duration,
 	fs::read_dir,
 	fs::File,
+	fs::read_to_string,
 	io::Write
 };
 use anyhow::Result;
@@ -23,8 +24,8 @@ async fn main() -> Result<()> {
 	}
 	client.close().await?;
 
-	let mut files: Vec<i64> = Vec::new();
-	
+	let pics: String = read_to_string("../back/pics.json")?;
+	let mut files: Vec<i64> = serde_json::from_str(&pics)?;
 	for entry in read_dir("../back/pics")? {
 		let entry = entry?;
 		let path = entry.path();
