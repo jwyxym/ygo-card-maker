@@ -54,22 +54,22 @@ async fn upload(mut payload: Multipart) -> Result<HttpResponse, Error> {
 
 #[get("/api/get")]
 async fn get() -> Result<HttpResponse, Error> {
-    let mut files: Vec<i64> = Vec::new();
-    
-    for entry in read_dir("pics")? {
-        let entry = entry?;
-        let path = entry.path();
-        
-        if path.is_file() {
-           	if let Some(name) = path.file_stem().and_then(|n| n.to_str()) {
+	let mut files: Vec<i64> = Vec::new();
+	
+	for entry in read_dir("pics")? {
+		let entry = entry?;
+		let path = entry.path();
+		
+		if path.is_file() {
+			if let Some(name) = path.file_stem().and_then(|n| n.to_str()) {
 				if let Ok(name) = name.to_string().parse::<i64>() {
-                	files.push(name);
+					files.push(name);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
     
-    Ok(HttpResponse::Ok().json(files))
+	Ok(HttpResponse::Ok().json(files))
 }
 
 #[actix_web::main]
