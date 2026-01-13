@@ -277,6 +277,8 @@ dependencies = [
  "actix-web",
  "futures",
  "futures-util",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

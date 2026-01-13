@@ -16,7 +16,7 @@ use std::{
 	fs::{
 		File,
 		create_dir_all,
-		read_dir
+		read_to_string
 	},
 	io::{
 		Write
@@ -54,21 +54,8 @@ async fn upload(mut payload: Multipart) -> Result<HttpResponse, Error> {
 
 #[get("/api/get")]
 async fn get() -> Result<HttpResponse, Error> {
-	let mut files: Vec<i64> = Vec::new();
-	
-	for entry in read_dir("pics")? {
-		let entry = entry?;
-		let path = entry.path();
-		
-		if path.is_file() {
-			if let Some(name) = path.file_stem().and_then(|n| n.to_str()) {
-				if let Ok(name) = name.to_string().parse::<i64>() {
-					files.push(name);
-				}
-			}
-		}
-	}
-    
+	let pics: String = read_to_string("pics.json")?;
+	let files: Vec<i64> = serde_json::from_str(&pics)?;
 	Ok(HttpResponse::Ok().json(files))
 }
 

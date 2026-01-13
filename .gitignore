@@ -1,7 +1,9 @@
 /back/target/
 /back/pics/
+/back/pics.json
 /browser/target/
 /browser/pics/
+/browser/pics.json
 /minisize_jpeg/target/
 /front/node_modules/
 /front/public/cards.cdb
